@@ -4,6 +4,735 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aura Terra Research</title>
+  <meta name="description" content="Aura Terra Research — an alchemical archive of earth, mineral study, transformation, and hidden natural order." />
+  <style>
+    :root{
+      --bg:#0a0806;
+      --bg2:#120e09;
+      --panel:#161109;
+      --panel-soft:rgba(255,248,220,0.03);
+      --gold:#d7b36a;
+      --gold-bright:#f3e1b2;
+      --gold-dim:#9c7a3a;
+      --text:#efe6d3;
+      --muted:#c7b89a;
+      --line:rgba(215,179,106,0.24);
+      --shadow:0 0 30px rgba(215,179,106,0.08);
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top, rgba(215,179,106,0.06), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(215,179,106,0.04), transparent 24%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+      letter-spacing:0.15px;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:0.08;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.7) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 80% 20%, rgba(215,179,106,0.6) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 60% 70%, rgba(255,255,255,0.5) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 30% 80%, rgba(215,179,106,0.55) 0 1px, transparent 1.5px);
+      background-size: 220px 220px, 260px 260px, 300px 300px, 340px 340px;
+      animation: drift 24s linear infinite;
+      z-index:0;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.012) 0px,
+          rgba(255,255,255,0.012) 1px,
+          transparent 2px,
+          transparent 4px
+        );
+      opacity:0.06;
+      mix-blend-mode:soft-light;
+      z-index:0;
+    }
+
+    @keyframes drift{
+      from{ transform:translateY(0); }
+      to{ transform:translateY(30px); }
+    }
+
+    @keyframes pulse{
+      0%,100%{ opacity:0.75; }
+      50%{ opacity:1; }
+    }
+
+    @keyframes rotateSlow{
+      from{ transform:translate(-50%, -50%) rotate(0deg); }
+      to{ transform:translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes shimmer{
+      0%{ background-position:0% 50%; }
+      100%{ background-position:100% 50%; }
+    }
+
+    .container{
+      position:relative;
+      z-index:1;
+      width:min(1180px, calc(100% - 32px));
+      margin:0 auto;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter:blur(10px);
+      background:rgba(10,8,6,0.72);
+      border-bottom:1px solid rgba(215,179,106,0.12);
+    }
+
+    .topbar-inner{
+      width:min(1180px, calc(100% - 32px));
+      margin:0 auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 0;
+    }
+
+    .brand{
+      color:var(--gold-bright);
+      text-decoration:none;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      font-size:0.78rem;
+    }
+
+    .nav{
+      display:flex;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:0.95rem;
+      transition:.2s ease;
+    }
+
+    .nav a:hover{
+      color:var(--gold-bright);
+    }
+
+    .hero{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:1.05fr 0.95fr;
+      gap:42px;
+      align-items:center;
+      padding:56px 0 30px;
+    }
+
+    .hero-copy{
+      padding:10px 0 10px 4px;
+    }
+
+    .eyebrow{
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:.36em;
+      font-size:0.78rem;
+      margin-bottom:18px;
+    }
+
+    h1{
+      font-weight:normal;
+      line-height:0.95;
+      font-size:clamp(3rem, 7vw, 6rem);
+      color:var(--gold-bright);
+      text-shadow:0 0 24px rgba(215,179,106,0.08);
+      margin-bottom:20px;
+    }
+
+    h1 span{
+      display:block;
+      font-size:0.54em;
+      color:var(--muted);
+      margin-top:12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+    }
+
+    .lead{
+      max-width:620px;
+      color:var(--muted);
+      line-height:1.95;
+      font-size:1.05rem;
+      margin-bottom:28px;
+    }
+
+    .invocation{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:18px;
+      padding:18px 20px;
+      color:#e7d8b5;
+      line-height:1.85;
+      font-style:italic;
+      margin-bottom:28px;
+      box-shadow:var(--shadow);
+    }
+
+    .cta-row{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      display:inline-block;
+      padding:13px 20px;
+      border-radius:999px;
+      text-decoration:none;
+      color:var(--gold-bright);
+      border:1px solid rgba(215,179,106,0.34);
+      background:rgba(255,255,255,0.02);
+      box-shadow:var(--shadow);
+      transition:.22s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      background:rgba(215,179,106,0.08);
+      border-color:rgba(215,179,106,0.56);
+    }
+
+    .seal-stage{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .seal{
+      position:relative;
+      width:min(500px, 92vw);
+      aspect-ratio:1/1;
+      border-radius:50%;
+      border:1px solid rgba(215,179,106,0.26);
+      background:
+        radial-gradient(circle at center, rgba(215,179,106,0.08), transparent 55%),
+        radial-gradient(circle at center, rgba(255,255,255,0.02), transparent 70%);
+      box-shadow:
+        0 0 0 1px rgba(215,179,106,0.08) inset,
+        0 0 50px rgba(215,179,106,0.07),
+        0 0 120px rgba(215,179,106,0.03);
+    }
+
+    .seal-ring,
+    .seal-ring-2,
+    .seal-ring-3{
+      position:absolute;
+      inset:50%;
+      border-radius:50%;
+      transform:translate(-50%, -50%);
+      border:1px solid rgba(215,179,106,0.18);
+    }
+
+    .seal-ring{ width:84%; height:84%; animation:rotateSlow 42s linear infinite; }
+    .seal-ring-2{ width:64%; height:64%; border-style:dashed; animation:rotateSlow 28s linear infinite reverse; }
+    .seal-ring-3{ width:42%; height:42%; opacity:0.85; }
+
+    .seal-script{
+      position:absolute;
+      inset:8%;
+      border-radius:50%;
+      border:1px dotted rgba(215,179,106,0.12);
+    }
+
+    .point{
+      position:absolute;
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:var(--gold);
+      box-shadow:0 0 14px rgba(215,179,106,0.8);
+      animation:pulse 5s ease-in-out infinite;
+    }
+
+    .point.p1{ top:9%; left:50%; transform:translateX(-50%); }
+    .point.p2{ left:14%; bottom:20%; }
+    .point.p3{ right:14%; bottom:20%; }
+    .point.p4{ left:50%; bottom:7%; transform:translateX(-50%); }
+
+    .sigil{
+      position:absolute;
+      inset:0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      color:var(--gold-bright);
+      text-shadow:0 0 18px rgba(215,179,106,0.18);
+    }
+
+    .sigil svg{
+      width:70%;
+      height:70%;
+      overflow:visible;
+      filter:drop-shadow(0 0 10px rgba(215,179,106,0.1));
+    }
+
+    .section{
+      padding:22px 0 36px;
+    }
+
+    .panel{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.008)),
+        var(--panel-soft);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:34px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:linear-gradient(120deg, transparent 0%, rgba(215,179,106,0.04) 48%, transparent 52%, transparent 100%);
+      background-size:200% 100%;
+      animation:shimmer 10s linear infinite;
+      opacity:0.5;
+    }
+
+    .section-title{
+      position:relative;
+      z-index:1;
+      color:var(--gold-bright);
+      font-size:1.8rem;
+      font-weight:normal;
+      margin-bottom:12px;
+      letter-spacing:0.04em;
+    }
+
+    .section-text{
+      position:relative;
+      z-index:1;
+      color:var(--muted);
+      line-height:1.9;
+      max-width:860px;
+    }
+
+    .cards{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:18px;
+      margin-top:26px;
+    }
+
+    .card{
+      border:1px solid rgba(215,179,106,0.16);
+      background:rgba(255,255,255,0.018);
+      border-radius:18px;
+      padding:22px;
+    }
+
+    .card h3{
+      color:var(--gold);
+      font-weight:normal;
+      margin-bottom:10px;
+      letter-spacing:0.04em;
+    }
+
+    .card p{
+      color:var(--muted);
+      line-height:1.8;
+      font-size:0.98rem;
+    }
+
+    .journal-list{
+      position:relative;
+      z-index:1;
+      margin-top:24px;
+      display:grid;
+      gap:16px;
+    }
+
+    .entry{
+      border-left:2px solid rgba(215,179,106,0.34);
+      padding:14px 0 14px 18px;
+      background:rgba(255,255,255,0.012);
+      border-radius:0 14px 14px 0;
+    }
+
+    .entry-title{
+      color:var(--gold-bright);
+      margin-bottom:6px;
+      font-size:1.05rem;
+    }
+
+    .entry p{
+      color:var(--muted);
+      line-height:1.8;
+    }
+
+    .gallery{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:16px;
+      margin-top:24px;
+    }
+
+    .stone{
+      min-height:180px;
+      border-radius:18px;
+      border:1px solid rgba(215,179,106,0.16);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent 24%),
+        radial-gradient(circle at 70% 70%, rgba(215,179,106,0.08), transparent 28%),
+        linear-gradient(145deg, #1b1610, #0e0b08 55%, #17120c);
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      box-shadow:inset 0 0 22px rgba(255,255,255,0.02);
+    }
+
+    .stone strong{
+      color:var(--gold-bright);
+      font-weight:normal;
+      margin-bottom:6px;
+    }
+
+    .stone span{
+      color:var(--muted);
+      line-height:1.6;
+      font-size:0.94rem;
+    }
+
+    .seal-row{
+      position:relative;
+      z-index:1;
+      display:flex;
+      justify-content:center;
+      gap:22px;
+      flex-wrap:wrap;
+      margin-top:28px;
+    }
+
+    .mini{
+      width:110px;
+      height:110px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(215,179,106,0.22);
+      color:var(--gold-bright);
+      font-size:2rem;
+      background:radial-gradient(circle, rgba(215,179,106,0.06), transparent 72%);
+      box-shadow:0 0 24px rgba(215,179,106,0.05);
+    }
+
+    footer{
+      text-align:center;
+      color:#b6a88c;
+      padding:20px 0 42px;
+      font-size:0.92rem;
+    }
+
+    .divider{
+      height:1px;
+      width:min(1180px, calc(100% - 32px));
+      margin:18px auto 16px;
+      background:linear-gradient(90deg, transparent, rgba(215,179,106,0.32), transparent);
+    }
+
+    @media (max-width: 980px){
+      .hero{
+        grid-template-columns:1fr;
+        gap:24px;
+        padding-top:34px;
+      }
+
+      .hero-copy{
+        text-align:center;
+      }
+
+      .lead{
+        margin-left:auto;
+        margin-right:auto;
+      }
+
+      .cta-row{
+        justify-content:center;
+      }
+
+      .cards{
+        grid-template-columns:1fr;
+      }
+
+      .gallery{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px){
+      .topbar-inner{
+        flex-direction:column;
+        gap:10px;
+      }
+
+      .nav{
+        justify-content:center;
+      }
+
+      .panel{
+        padding:24px;
+      }
+
+      .gallery{
+        grid-template-columns:1fr;
+      }
+
+      .mini{
+        width:92px;
+        height:92px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top">Aura Terra Research</a>
+      <nav class="nav">
+        <a href="#about">About</a>
+        <a href="#themes">Themes</a>
+        <a href="#journal">Journal</a>
+        <a href="#gallery">Gallery</a>
+      </nav>
+    </div>
+  </div>
+
+  <main class="container" id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Alchemy • Earth • Inquiry • Transformation</div>
+        <h1>
+          Aura Terra
+          <span>Research</span>
+        </h1>
+        <p class="lead">
+          A manuscript of earthward contemplation, mineral observation, hidden structure,
+          and elemental transformation. Aura Terra Research is a symbolic and practical
+          archive devoted to stone, metal, pattern, and the quiet intelligence of the natural world.
+        </p>
+
+        <div class="invocation">
+          “Within stone there is memory. Within fire there is revelation.
+          Within the patient study of earth there may yet appear a hidden gold.”
+        </div>
+
+        <div class="cta-row">
+          <a class="btn" href="#about">Enter the Archive</a>
+          <a class="btn" href="#journal">Open the Journal</a>
+        </div>
+      </div>
+
+      <div class="seal-stage">
+        <div class="seal" aria-label="Ancient alchemical seal">
+          <div class="seal-ring"></div>
+          <div class="seal-ring-2"></div>
+          <div class="seal-ring-3"></div>
+          <div class="seal-script"></div>
+
+          <div class="point p1"></div>
+          <div class="point p2"></div>
+          <div class="point p3"></div>
+          <div class="point p4"></div>
+
+          <div class="sigil">
+            <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="150" cy="150" r="116" stroke="currentColor" stroke-width="2" opacity="0.45"/>
+              <circle cx="150" cy="150" r="90" stroke="currentColor" stroke-width="1.6" opacity="0.42"/>
+              <polygon points="150,62 228,198 72,198" stroke="currentColor" stroke-width="2.7"/>
+              <line x1="92" y1="170" x2="208" y2="170" stroke="currentColor" stroke-width="2.4"/>
+              <circle cx="150" cy="135" r="23" stroke="currentColor" stroke-width="2.3"/>
+              <line x1="150" y1="82" x2="150" y2="233" stroke="currentColor" stroke-width="2.15"/>
+              <path d="M112 225 Q150 257 188 225" stroke="currentColor" stroke-width="2.2"/>
+              <path d="M106 100 Q150 42 194 100" stroke="currentColor" stroke-width="2" opacity="0.86"/>
+              <path d="M122 134 Q150 114 178 134" stroke="currentColor" stroke-width="1.5" opacity="0.78"/>
+              <circle cx="150" cy="52" r="6" fill="currentColor"/>
+              <circle cx="72" cy="198" r="5" fill="currentColor"/>
+              <circle cx="228" cy="198" r="5" fill="currentColor"/>
+              <circle cx="150" cy="248" r="5" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="panel">
+        <h2 class="section-title">About the Archive</h2>
+        <p class="section-text">
+          This space is designed as a modern hermetic archive: part research portal,
+          part visual manuscript, part field notebook. Its language draws from sacred geometry,
+          old laboratory diagrams, mineral study, elemental symbolism, and the beauty of terrestrial matter.
+        </p>
+
+        <div class="seal-row">
+          <div class="mini">☉</div>
+          <div class="mini">△</div>
+          <div class="mini">✶</div>
+          <div class="mini">☿</div>
+          <div class="mini">◯</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="themes">
+      <div class="panel">
+        <h2 class="section-title">Research Themes</h2>
+        <p class="section-text">
+          These themes can remain poetic, or you can replace them with your actual areas of study,
+          field notes, extraction methods, geology observations, and project records.
+        </p>
+
+        <div class="cards">
+          <article class="card">
+            <h3>Elemental Observation</h3>
+            <p>
+              Study of soil, stone, mineral traces, oxidation, sediment, metallic signatures,
+              and the visible language of terrestrial transformation.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Alchemical Symbolism</h3>
+            <p>
+              Exploration of glyphs, seals, sacred proportion, ritual geometry, and symbolic
+              systems that describe hidden order and transmutation.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Field Inquiry</h3>
+            <p>
+              Place-based investigation: local geology, raw material collection, visual analysis,
+              and the relationship between landscape and possibility.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="journal">
+      <div class="panel">
+        <h2 class="section-title">Research Journal</h2>
+        <p class="section-text">
+          A section for observations, extraction notes, sample logs, hypotheses, and evolving methods.
+        </p>
+
+        <div class="journal-list">
+          <div class="entry">
+            <div class="entry-title">Entry I — Initial Material Survey</div>
+            <p>
+              Preliminary examination of local rock and earth samples, noting color variation,
+              metallic glint, fracture patterns, density, and possible signs of oxidation or mineral concentration.
+            </p>
+          </div>
+
+          <div class="entry">
+            <div class="entry-title">Entry II — Symbol and Substance</div>
+            <p>
+              Comparative reflection between the visible geometry of mineral structures and traditional
+              alchemical symbols of purification, ascent, and hidden essence.
+            </p>
+          </div>
+
+          <div class="entry">
+            <div class="entry-title">Entry III — Process Notes</div>
+            <p>
+              A place to document testing methods, washing stages, separation attempts, residue observations,
+              and any recurring patterns in sample response.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="gallery">
+      <div class="panel">
+        <h2 class="section-title">Mineral Gallery</h2>
+        <p class="section-text">
+          Placeholder specimen panels for rock, ore, sediment, and other collected materials.
+          These can later be replaced with real photos.
+        </p>
+
+        <div class="gallery">
+          <div class="stone">
+            <strong>Specimen I</strong>
+            <span>Veined stone with metallic flecking and dark matrix structure.</span>
+          </div>
+          <div class="stone">
+            <strong>Specimen II</strong>
+            <span>Granular earth fraction with layered coloration and compact residue.</span>
+          </div>
+          <div class="stone">
+            <strong>Specimen III</strong>
+            <span>Oxidized fragment bearing warm mineral tones and fractured faces.</span>
+          </div>
+          <div class="stone">
+            <strong>Specimen IV</strong>
+            <span>Dense rock sample exhibiting subtle reflective particles under light.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="divider"></div>
+
+  <footer>
+    Aura Terra Research • Hermetic Field Archive • © 2026
+  </footer>
+</body>
+</html> html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aura Terra Research</title>
   <style>
     :root{
       --bg1:#0d0b09;
